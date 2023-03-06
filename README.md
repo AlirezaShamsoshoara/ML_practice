@@ -1,2 +1,2 @@
-# ML_practice
+# ML Practice
 ML daily practices
