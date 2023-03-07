@@ -123,7 +123,7 @@ def fnn(input):
         nn.ReLU(),
         nn.Linear(64, 2),
     )
-    return (model(input))
+    return model(input)
 
 
 if __name__ == "__main__":
