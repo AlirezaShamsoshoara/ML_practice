@@ -56,7 +56,7 @@ def train():
         print(f'epoch {epoch}, loss {loss.item()}')
 
 
-def neuron(input):
+def neuron(input_val):
     """_summary_
 
     Args:
@@ -68,7 +68,7 @@ def neuron(input):
     # WRITE YOUR CODE HERE
     w = torch.tensor([0.5, 0.5, 0.5])
     b = torch.tensor([0.5])
-    return torch.add(torch.matmul(input, w), b)
+    return torch.add(torch.matmul(input_val, w), b)
 
 
 class Model(nn.Module):
