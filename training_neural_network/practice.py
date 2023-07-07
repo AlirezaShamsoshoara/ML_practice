@@ -6,17 +6,18 @@
 
 #########################################################
 # import libraries
-import torch
-import torch.nn as nn
 import os
 import sys
+import torch
+import torch.nn as nn
+import numpy as np
 cwd = os.getcwd()
 #add CIFAR10 data in the environment
-sys.path.append(cwd + '/../cifar10') 
+sys.path.append(cwd + '/../cifar10')
 
 #Numpy is linear algebra lbrary
-import numpy as np
-# Matplotlib is a visualizations library 
+
+# Matplotlib is a visualizations library
 import matplotlib.pyplot as plt
 import torch.optim as optim
 from torchvision import utils
