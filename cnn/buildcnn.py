@@ -142,6 +142,10 @@ def evaluate(model):
 
 
 def buildcnn():
+    training_data = load_data()
+    model = CNN()
+    train(model, training_data=training_data)
+    evaluate(model)
 
 
 if __name__ == "__main__":
