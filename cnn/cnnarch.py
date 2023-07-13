@@ -60,5 +60,5 @@ class AlexNet(nn.Module):
 
 if __name__ == "__main__":
     model = AlexNet()
-    inp = torch.rand(1,3,128,128)
+    inp = torch.rand(1, 3, 128, 128)
     print(model(inp).shape)
