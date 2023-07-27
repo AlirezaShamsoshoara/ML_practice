@@ -39,6 +39,8 @@ Sequence unrolling and backpropagation through time come hand in hand. This is a
 dataloader = None
 
 def rnn_roling_test():
+    """_summary_
+    """
     accumulate_gradient_steps = 2
     for counter, data in enumerate(dataloader):
         inputs, targets = data
@@ -48,7 +50,7 @@ def rnn_roling_test():
         
         if counter % accumulate_gradient_steps ==0:
             optimizer.step()
-            optimizer.zero_grad() 
+            optimizer.zero_grad()
 
 if __name__ == "__main__":
     rnn_roling_test()
