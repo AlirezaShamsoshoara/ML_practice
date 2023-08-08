@@ -17,6 +17,11 @@ import torch.nn as nn
 # Function definition
 
 class MyLstmCell(torch.nn.Module):
+    """_summary_
+
+    Args:
+        torch (_type_): _description_
+    """
     def __init__(self, input_length=10, hidden_length=20):
         super(MyLstmCell, self).__init__()
         self.input_length = input_length
@@ -52,12 +57,30 @@ class MyLstmCell(torch.nn.Module):
         self.activation_final = nn.Tanh()
 
     def forget(self, x, h):
+        """_summary_
+
+        Args:
+            x (_type_): _description_
+            h (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         x_temp = self.linear_gate_w1(x)
         h_temp = self.linear_gate_r1(h)
         f = self.sigmoid_forget(x_temp + h_temp)
         return f
 
     def input_gate(self, x, h):
+        """_summary_
+
+        Args:
+            x (_type_): _description_
+            h (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         # input gate
         x_temp = self.linear_gate_w2(x)
         h_temp = self.linear_gate_r2(h)
@@ -65,6 +88,18 @@ class MyLstmCell(torch.nn.Module):
         return i
 
     def cell_memory_gate(self, i, f, x, g, c_prev):
+        """_summary_
+
+        Args:
+            i (_type_): _description_
+            f (_type_): _description_
+            x (_type_): _description_
+            g (_type_): _description_
+            c_prev (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         x = self.linear_gate_w3(x)
         h = self.linear_gate_r3(h)
 
@@ -78,11 +113,29 @@ class MyLstmCell(torch.nn.Module):
         return c_next
 
     def out_gate(self, x, h):
+        """_summary_
+
+        Args:
+            x (_type_): _description_
+            h (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         x = self.linear_gate_w4(x)
         h = self.linear_gate_r4(h)
         return self.sigmoid_hidden_out(x + h)
 
     def forward(self, x, tuple_in ):
+        """_summary_
+
+        Args:
+            x (_type_): _description_
+            tuple_in (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         (h, c_prev) = tuple_in
         # Equation 1. input gate
         i = self.input_gate(x, h)

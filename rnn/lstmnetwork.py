@@ -26,7 +26,20 @@ torch.manual_seed(seed)
 #########################################################
 # Function definition
 
+"""_summary_
+We connect LSTM cells in time by connecting both the context vector and the hidden state vector
+from the previous timestep (the so-called unrolling).  Recurrent models are really flexible in the mapping
+from input to output sequences. You just have to modify the input to hidden states and the hidden to output
+states based on the problem. By definition, LSTMs can process arbitrary input timesteps. The output can be
+tuned by designing which outputs of the last hidden-to-hidden layer are used to compute the desired output.
+"""
+
 def generate_sin_wave_data():
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
     T = 20
     L = 1000
     N = 200
@@ -34,11 +47,15 @@ def generate_sin_wave_data():
     x = np.empty((N, L), 'int64')
     x[:] = np.array(range(L)) + np.random.randint(-4 * T, 4 * T, N).reshape(N, 1)
     data = np.sin(x / 1.0 / T).astype('float64')
-
     return data
 
 
 class Sequence(nn.Module):
+    """_summary_
+
+    Args:
+        nn (_type_): _description_
+    """
     def __init__(self):
         super(Sequence, self).__init__()
 
@@ -48,6 +65,15 @@ class Sequence(nn.Module):
         self.linear = nn.Linear(51, 1)
 
     def forward(self, input, future=0):
+        """_summary_
+
+        Args:
+            input (_type_): _description_
+            future (int, optional): _description_. Defaults to 0.
+
+        Returns:
+            _type_: _description_
+        """
         outputs = []
         h_t = torch.zeros(input.size(0), 51, dtype=torch.double)
         c_t = torch.zeros(input.size(0), 51, dtype=torch.double)
