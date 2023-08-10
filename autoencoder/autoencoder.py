@@ -47,7 +47,51 @@ Latent variable models aim to model the probability distribution with latent var
 Latent variables are a transformation of the data points into a continuous lower-dimensional space.
 
 
-"""
+Autoencoders are simple neural networks such that their output is their input.
+The first part of the network is what we refer to as the encoder. It receives the input and encodes it in a latent
+space of a lower dimension (the latent variables z).
+For now, you can think of the latent space as a continuous low-dimensional space.
+The second part (the decoder) takes that vector and decodes it in order to produce the original input.
+The latent vector z in the middle is what we want, as it is a compressed representation of the input.
+The applications of the latent vector z are plentiful.
+""" 
+
+class Autoencoder(nn.Module):
+    def __init__(self):
+        """
+        In the first part of the network, the size of the input is gradually decreasing,
+        resulting in a compact latent representation. In the second part, ConvTrasnposed2d layers
+        are increasing the size with the goal to output the original size on the final layer.
+        """
+        super(Autoencoder, self).__init__()
+        # Input size: [batch, 3, 32, 32]
+        # Output size: [batch, 3, 32, 32]
+        self.encoder = nn.Sequential(
+            nn.Conv2d(3, 12, 4, stride=2, padding=1),  # [batch, 12, 16, 16]
+            nn.ReLU(),
+            nn.Conv2d(12, 24, 4, stride=2, padding=1),  # [batch, 24, 8, 8]
+            nn.ReLU(),
+            nn.Conv2d(24, 48, 4, stride=2, padding=1),  # [batch, 48, 4, 4]
+            nn.ReLU(),
+            nn.Conv2d(48, 96, 4, stride=2, padding=1),  # [batch, 96, 2, 2]
+            nn.ReLU()
+        )
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(96, 48, 4, stride=2, padding=1),  # [batch, 48, 4, 4]
+            nn.ReLU(),
+            nn.ConvTranspose2d(48, 24, 4, stride=2, padding=1),  # [batch, 24, 8, 8]
+            nn.ReLU(),
+            nn.ConvTranspose2d(24, 12, 4, stride=2, padding=1),  # [batch, 12, 16, 16]
+            nn.ReLU(),
+            nn.ConvTranspose2d(12, 3, 4, stride=2, padding=1),  # [batch, 3, 32, 32]
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+
+        return decoded
 
 
 def auto_encoder():
