@@ -53,5 +53,20 @@ def elbo(reconstructed, input, mu, logvar):
     kl_loss = -0.5 * (torch.sum(1+logvar - mu.pow(2) - logvar.exp()))
     return rec_loss + kl_loss
 
+
+def reparameterize(mu, log_var):
+    """
+        Args:
+            `mu`: mean from the encoder's latent space
+            `log_var`: log variance from the encoder's latent space
+
+        Returns:
+            the reparameterized latent vector z
+    """
+    eps = torch.randn(mu.size())
+    z = mu + eps * log_var.exp()
+    return z
+
+
 if __name__ == "__main__":
     variational_auto_encoder()
