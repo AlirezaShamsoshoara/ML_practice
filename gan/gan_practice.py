@@ -14,7 +14,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import torch.nn.functional as F
 # %matplotlib inline
-
+from torchvision import datasets
 import torch.optim as optim
 
 #########################################################
@@ -29,9 +29,40 @@ torch.manual_seed(seed)
 """_summary_
 
 """
+
+
+class DiscNet(torch.nn.Module):
+    """_summary_
+
+    Args:
+        torch (_type_): _description_
+    """
+    def __init__(self, ):
+        super(DiscNet, self).__init__()
+        n_features = 3072
+        n_out = 1
+        
+        self.hidden_0 = nn.Sequential(
+            nn.Linear(in_features=n_features, out_features=1024, ),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3)
+        )
+
+        self.hidden_1 = nn.Sequential(
+            nn.Linear(in_features=1024, out_features=512),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3)
+        )
+        
+
+        
+
+
+
 def gan_practice():
     pass
 
+
 if __name__ == "__main__":
-    model = gan_practice()
+    gan_practice()
     # train(model, training_data)
