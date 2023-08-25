@@ -41,7 +41,7 @@ class DiscNet(torch.nn.Module):
         super(DiscNet, self).__init__()
         n_features = 3072
         n_out = 1
-        
+
         self.hidden_0 = nn.Sequential(
             nn.Linear(in_features=n_features, out_features=1024, ),
             nn.LeakyReLU(0.2),
@@ -53,11 +53,31 @@ class DiscNet(torch.nn.Module):
             nn.LeakyReLU(0.2),
             nn.Dropout(0.3)
         )
+
+        self.hidden_1 = nn.Sequential(
+            nn.Linear(in_features=512, out_features=256),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3)
+        )
+
+        self.out == nn.Sequential(
+            nn.Linear(in_features=256, out_features=n_out),
+            torch.nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        x = self.hidden_0(x)
+        x = self.hidden_1(x)
+        x = self.hidden_2(x)
+        return self.out(x)
+
+
+class GenNet(torch.nn.Module):
+    def __init__(self,):
+        super(GenNet, self).__init__()
+        n_features = 100
+        n_out = 3072
         
-
-        
-
-
 
 def gan_practice():
     pass
