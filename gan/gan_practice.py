@@ -55,7 +55,7 @@ class DiscNet(torch.nn.Module):
             nn.Dropout(0.3)
         )
 
-        self.hidden_1 = nn.Sequential(
+        self.hidden_2 = nn.Sequential(
             nn.Linear(in_features=512, out_features=256),
             nn.LeakyReLU(0.2),
             nn.Dropout(0.3)
@@ -180,7 +180,7 @@ def train_gen(disc, opt, fake_data, loss):
 
 
 def noise(size):
-    n = torch.randnn(size, 100)
+    n = torch.randn(size, 100)
     return n
 
 
@@ -243,13 +243,13 @@ def gan_practice():
             fake_data = gen(latent_space_data).detach()
             
             # loss_real + loss_fake, pred_real, pred_fake
-            loss_d, pred_real, pred_fake = train_disc(disc, opt=opt_d, real_data=real_data,
+            loss_disc_val, pred_real, pred_fake = train_disc(disc, opt=opt_d, real_data=real_data,
                                                       fake_data=fake_data, loss=loss_d)
             
             latent_space_data = noise(n)
             fake_data = gen(latent_space_data)
-            loss_g = train_gen(disc=disc, opt=opt_g, fake_data=fake_data, loss=loss_g)
-            print(f'Loss _ D:{loss_d}, Loss _ G:{loss_g}')
+            loss_gen_val = train_gen(disc=disc, opt=opt_g, fake_data=fake_data, loss=loss_g)
+            print(f'Loss _ D:{loss_disc_val}, Loss _ G:{loss_gen_val}')
 
 if __name__ == "__main__":
     gan_practice()
