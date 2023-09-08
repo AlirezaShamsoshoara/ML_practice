@@ -9,10 +9,13 @@
 import random
 import numpy as np
 import torch
+import math
 from torch import nn
 import matplotlib
 import matplotlib.pyplot as plt
 import torch.nn.functional as F
+from collections.abc import Sequence
+from typing import Tuple, Optional
 # %matplotlib inline
 # from torch.autograd import Variable
 import torchvision.transforms as transforms
@@ -57,7 +60,33 @@ class Attention(nn.Module):
         attention = torch.matmul(score, h)
         return attention
 
+class ScaledDotProductAttention(nn.Module):
+    def __init__(self, *args, **kwargs):
+        super(ScaledDotProductAttention).__init__(*args, **kwargs)
+        pass
 
+    def forward(self,
+                query: torch.FloatTensor,
+                key: torch.FloatTensor,
+                value: torch.FloatTensor,
+                mask: Optional[torch.ByteTensor] = None,
+                droptout: Optional[nn.Dropout] = None) -> Tuple[torch.Tensor, any]:
+        """_summary_
+
+        Args:
+            `query`: shape (batch_size, n_heads, max_len, d_q)
+            `key`: shape (batch_size, n_heads, max_len, d_k)
+            `value`: shape (batch_size, n_heads, max_len, d_v)
+            `mask`: shape (batch_size, 1, 1, max_len)
+            `dropout`: nn.Dropout
+
+        Returns:
+            Tuple[torch.Tensor, any]: _description_
+        """
+        d_k = query.size(-1)
+        scores = torch.matmul(query, key.transpose(-2, -1)) / math.sqrt(d_k)
+
+   
 if __name__ == "__main__":
     attention_model = Attention(y_dim=10, h_dim=20)
     y = torch.rand(1, 10)
