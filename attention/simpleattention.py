@@ -61,6 +61,14 @@ class Attention(nn.Module):
         return attention
 
 class ScaledDotProductAttention(nn.Module):
+    """_summary_
+    class appears to implement the scaled dot-product attention mechanism, which is a crucial component of the transformer
+    architecture used in deep learning, especially in tasks like natural language processing and sequence-to-sequence modeling.
+    This mechanism calculates the attention scores between the query and key vectors and uses those scores to weight the values,
+    allowing the model to focus on relevant parts of the input sequence. 
+    Args:
+        nn (_type_): _description_
+    """
     def __init__(self, *args, **kwargs):
         super(ScaledDotProductAttention).__init__(*args, **kwargs)
         pass
@@ -83,10 +91,28 @@ class ScaledDotProductAttention(nn.Module):
         Returns:
             Tuple[torch.Tensor, any]: _description_
         """
+        # Get the dimension of the key vectors.
         d_k = query.size(-1)
-        scores = torch.matmul(query, key.transpose(-2, -1)) / math.sqrt(d_k)
 
-   
+        # key.transpose(-2, -1) is a way to transpose a multi-dimensional array or tensor along its
+        # two last dimensions.
+        # For example, let's say you have a 4-dimensional tensor (a 4D array) key with shape
+        # (batch_size, n_heads, max_len, d_k).
+        # If you call key.transpose(-2, -1), it will swap the last two dimensions,
+        # resulting in a new tensor with shape (batch_size, n_heads, d_k, max_len).
+        # Calculate the dot products between query and key, and scale them.
+        scores = torch.matmul(query, key.transpose(-2, -1)) / math.sqrt(d_k)
+        if mask is not None:
+            scores = scores.masked_fill(mask.eq(0), -1e9)
+        p_attn = F.softmax(scores, dim=-1)
+        if droptout is not None:
+            p_attn = droptout(p_attn)
+
+        # Compute the weighted sum of the values using the attention weights.
+        output = torch.matmul(p_attn, value)
+        return output, p_attn
+
+
 if __name__ == "__main__":
     attention_model = Attention(y_dim=10, h_dim=20)
     y = torch.rand(1, 10)
