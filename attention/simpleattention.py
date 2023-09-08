@@ -1,6 +1,6 @@
 '''
 #################################
-# Python API: ML Practice (GAN Practice)
+# Python API: ML Practice (Transformer Practice - Attention)
 #################################
 '''
 
