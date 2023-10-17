@@ -70,7 +70,7 @@ class ScaledDotProductAttention(nn.Module):
         nn (_type_): _description_
     """
     def __init__(self, *args, **kwargs):
-        super(ScaledDotProductAttention).__init__(*args, **kwargs)
+        super(ScaledDotProductAttention, self).__init__(*args, **kwargs)
         pass
 
     def forward(self,
@@ -78,7 +78,8 @@ class ScaledDotProductAttention(nn.Module):
                 key: torch.FloatTensor,
                 value: torch.FloatTensor,
                 mask: Optional[torch.ByteTensor] = None,
-                droptout: Optional[nn.Dropout] = None) -> Tuple[torch.Tensor, any]:
+                dropout: Optional[nn.Dropout] = None):
+        #  -> Tuple[torch.Tensor, any]:
         """_summary_
 
         Args:
@@ -105,8 +106,8 @@ class ScaledDotProductAttention(nn.Module):
         if mask is not None:
             scores = scores.masked_fill(mask.eq(0), -1e9)
         p_attn = F.softmax(scores, dim=-1)
-        if droptout is not None:
-            p_attn = droptout(p_attn)
+        if dropout is not None:
+            p_attn = dropout(p_attn)
 
         # Compute the weighted sum of the values using the attention weights.
         output = torch.matmul(p_attn, value)

@@ -22,7 +22,7 @@ import torchvision.transforms as transforms
 from torchvision import datasets
 import torch.optim as optim
 from copy import deepcopy
-from attention.simpleattention import ScaledDotProductAttention
+from simpleattention import ScaledDotProductAttention
 
 #########################################################
 # General Parameters
@@ -38,25 +38,38 @@ torch.manual_seed(seed)
 """
 
 class MultiHeadSelfAttention(nn.Module):
+    """_summary_
+
+    Args:
+        nn (_type_): _description_
+    """
     def __init__(self, n_heads: int, d_model: int, dropout: float = 0.1, *args, **kwargs):
+        """_summary_
+
+        Args:
+            n_heads (int): _description_
+            d_model (int): _description_
+            dropout (float, optional): _description_. Defaults to 0.1.
+        """
         super(MultiHeadSelfAttention, self).__init__(*args, **kwargs)
         assert d_model % n_heads == 0
-        
+
         self.d_k = d_model // n_heads
         self.h = n_heads
 
         self.linears = nn.ModuleList(
             [deepcopy(nn.Linear(in_features=d_model, out_features=d_model)) for _ in range(4)]
         )
-        
-        self.spda = ScaledDotProductAttention()
+
+        self.sdpa = ScaledDotProductAttention()
         self.attn = None
         self.dropout = nn.Dropout(p=dropout)
 
     def forward(self, query: torch.FloatTensor,
                 key: torch.FloatTensor,
                 value: torch.FloatTensor,
-                mask: Optional[torch.ByteTensor] = None) -> torch.FloatTensor:
+                mask: Optional[torch.ByteTensor] = None):
+        #  -> torch.FloatTensor:
         """_summary_
 
         Args:
@@ -75,14 +88,15 @@ class MultiHeadSelfAttention(nn.Module):
         # 1) Do all the linear projections in batch from d_model => h x d_k
         query, key, value = [l(x).view(batch_size, -1, self.h, self.d_k).transpose(1, 2)
                              for l, x in zip(self.linears, (query, key, value))]
-        
+
         # 2) Apply attention on all the projected vectors in batch.
         # x: B x H x L x D_v
         x, self.attn = self.sdpa(query, key, value, mask=mask, dropout=self.dropout)
-        
+
         # 3) "Concat" using a view and apply a final linear.
         x = x.transpose(1, 2).contiguous().view(batch_size, -1, self.h * self.d_k)
         return self.linears[-1](x)
+
 
 if __name__ == "__main__":
     pass
