@@ -42,5 +42,9 @@ torch.manual_seed(seed)
 class EncoderLayer(nn.Module):
      """Encoder is made up of self-attn and feed forward"""
      
-     def __init__(self, size: int, self_attn: MultiHeadSelfAttention, feed_forward: *args, **kwargs) -> None:
+     def __init__(self, size: int, self_attn: MultiHeadSelfAttention,
+                  feed_forward: FeedForward, dropout: float, *args, **kwargs) -> None:
           super(EncoderLayer, self).__init__(*args, **kwargs)
+          self.self_attn = self_attn
+          self.dropout = dropout
+          self.feed_forward = feed_forward
