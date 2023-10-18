@@ -43,7 +43,7 @@ Linear layer as Feedforward, self attnetion part and skip connection with layer 
 """
 
 class FeedForward(nn.Module):
-    
+
     """_summary_
     Args:
         nn (_type_): _description_
