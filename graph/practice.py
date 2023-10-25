@@ -28,6 +28,7 @@ from scipy import misc
 from skimage.transform import resize
 from numpy import linalg as LA
 from scipy.sparse import csgraph
+import scipy.sparse as sparse
 from sklearn.feature_extraction.image import img_to_graph
 from sklearn.cluster import spectral_clustering
 import networkx as nx
@@ -186,8 +187,20 @@ def segmentation_laplacian():
     plt.show()
 
 
+def coo_format():
+    """_summary_
+    """
+    row = np.array([0, 3, 1, 0])
+    col = np.array([0, 3, 1, 2])
+    data = np.array([4, 5, 7, 9])
+    mtx = sparse.coo_matrix((data, (row, col)), shape=(4, 4))
+    mtx.todense()
+    print(mtx)
+
+
 if __name__ == "__main__":
     # test_lapl()
     # test_lalp_norm()
     # test_eigenvalue()
-    segmentation_laplacian()
+    # segmentation_laplacian()
+    coo_format()
