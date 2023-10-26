@@ -43,6 +43,63 @@ torch.manual_seed(seed)
 #########################################################
 # Function definition
 
+def calc_degree_matrix(a):
+    """_summary_
+
+    Args:
+        a (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    return torch.diag(a.sum(dim=-1))
+
+
+def calc_graph_lapl(a):
+    """_summary_
+
+    Args:
+        a (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    return calc_degree_matrix(a) - a
+
+
+def calc_degree_matrix_norm(a):
+    """_summary_
+
+    Args:
+        a (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    return torch.diag(torch.pow(a.sum(dim=-1), -0.5))
+
+
+def find_eigmax(L):
+    """_summary_
+
+    Args:
+        L (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    with torch.no_grad():
+        e1, _ = torch.eig(L, eigenvectors=False)
+        return torch.max(e1[:, 0]).item()
+
+
+def chebyshev_lapl(X, lapl, thetas, order):
+    list_powers = []
+    nodes = lapl.shape[0]
+    t0 = x.float()
+    eigmax = 
+    
+
 
 if __name__ == "__main__":
     pass
