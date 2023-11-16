@@ -5,3 +5,5 @@ attention/__pycache__/
 LLM/coursera_gen_ai_llm/week1/dialog_sum
 LLM/coursera_gen_ai_llm/week1/*.arrow
 LLM/coursera_gen_ai_llm/week1/*.json
+LLM/coursera_gen_ai_llm/week2/*checkpoint*
+# LLM/coursera_gen_ai_llm/week2/
